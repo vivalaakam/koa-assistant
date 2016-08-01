@@ -28,7 +28,8 @@ export default {
                         let data = await model.history(chat.id, mdate.startOf('day').unix(), mdate.endOf('day').unix());
 
                         if (data.length) {
-                            let resp = data.map(row => `- ${row.text}`).join("\n");
+                            let tasks = data.map(row => `- ${row.text}`).join("\n");
+                            let resp = `${mdate.format('DD.MM.YYYY')}\n${tasks}`;
                             bot.sendMessage(chat.id, resp);
                         } else {
                             bot.sendMessage(chat.id, 'No data');
