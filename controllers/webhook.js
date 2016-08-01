@@ -10,7 +10,7 @@ export default {
     telegram: async function run(ctx, next) {
 
         if (ctx.request.body.message) {
-            const {text, chat , date} = ctx.request.body.message;
+            const {text, chat , date, message_id} = ctx.request.body.message;
             let query = /\/(\w+)(?:\s+(.*))?/.exec(text);
 
             if (query) {
@@ -19,7 +19,8 @@ export default {
                         await model.create({
                             chat: chat.id,
                             time: date,
-                            text: query[2]
+                            text: query[2],
+                            message_id
                         });
                         break;
 
@@ -35,6 +36,24 @@ export default {
                             bot.sendMessage(chat.id, 'No data');
                         }
 
+                        break;
+                }
+            }
+        } else if (ctx.request.body.edited_message) {
+            const {text, chat , date, message_id} = ctx.request.body.edited_message;
+            let query = /\/(\w+)(?:\s+(.*))?/.exec(text);
+
+            if (query) {
+                switch (query[1]) {
+                    case 'do':
+
+                        let entry = await model.find(chat.id, message_id);
+
+                        if (entry) {
+                            await model.update(entry.id, {
+                                text: query[2]
+                            });
+                        }
                         break;
                 }
             }

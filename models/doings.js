@@ -7,10 +7,16 @@ export default class Doings extends RethinkDB {
     }
 
     async history(chat, start, end) {
-        console.log(arguments);
         let db = await this.db();
         let query = await r.table(this.collection).between(start, end, {index: 'time'}).filter({chat: chat}).run(db);
         let result = await query.toArray();
         return result;
+    }
+
+    async find(chat, message_id) {
+        let db = await this.db();
+        let query = await r.table(this.collection).filter({chat, message_id}).run(db);
+        let result = await query.toArray();
+        return result.length && result[0];
     }
 }
