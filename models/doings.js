@@ -1,9 +1,8 @@
 import RethinkDB, {r} from './rethinkdb';
 
-
 export default class Doings extends RethinkDB {
     constructor() {
-        super('doings', 'test');
+        super('doings');
         this.indexes = ['time', 'chat']
     }
 

@@ -1,9 +1,8 @@
 import r from 'rethinkdb';
 export { r };
 export default class RethinkDB {
-    constructor(collection, db_name) {
+    constructor(collection) {
         this.collection = collection;
-        this.db_name = db_name;
 
         this.tableCheck();
     }
@@ -17,7 +16,7 @@ export default class RethinkDB {
 
     db() {
         if (!this._conn) {
-            this._conn = r.connect({host: process.env.RETHINKDB_DB, port:  process.env.RETHINKDB_PORT, db: this.db_name});
+            this._conn = r.connect({host: process.env.RETHINKDB_DB, port:  process.env.RETHINKDB_PORT, db: process.env.RETHINKDB_NAME});
         }
 
         return this._conn;
