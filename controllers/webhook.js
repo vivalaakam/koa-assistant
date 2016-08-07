@@ -35,6 +35,7 @@ export default {
 
             if (query) {
                 switch (query.command) {
+                    default:
                     case '/do':
                         await model.create({
                             chat: chat.id,
