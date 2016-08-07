@@ -67,6 +67,7 @@ export default {
 
             if (query) {
                 switch (query.command) {
+                    default:
                     case '/do':
 
                         let entry = await model.find(chat.id, message_id);
@@ -77,6 +78,8 @@ export default {
                                 tags: query.tags
                             });
                         }
+                        break;
+                    case '/report':
                         break;
                 }
             }
