@@ -6,7 +6,7 @@ import Doings from '../models/doings';
 const model = new Doings();
 const bot = new TelegramBot(process.env.ASSISTANT_TOKEN);
 
-function parse({text, entities}) {
+function parse({text, entities = []}) {
     return entities.reduceRight((state, tag) => {
         switch (tag.type) {
             case 'hashtag':
@@ -30,6 +30,7 @@ export default {
     telegram: async function run(ctx, next) {
 
         if (ctx.request.body.message) {
+            console.log(JSON.stringify(ctx.request.body.message));
             const {text, chat, date, message_id, entities} = ctx.request.body.message;
             let query = parse({text, entities});
 
