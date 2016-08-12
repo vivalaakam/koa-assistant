@@ -12,15 +12,16 @@ export default class Doings extends RethinkDB {
         let query = await r.table(this.collection).between(start, end, {index: 'time'})
             .filter({chat: chat})
             .filter(
-                r.row('tags').contains(
-                    tag => {
-                        if (!tags.length) {
-                            return true;
+                r.expr(r.row('tags').isEmpty())
+                    .or(r.row('tags').contains(
+                        tag => {
+                            if (!tags.length) {
+                                return true;
+                            }
+                            let expr = r.expr(tag.match(tags.splice(0, 1)[0]));
+                            return tags.reduce((expr, ctag) => expr.or(tag.match(ctag)), expr);
                         }
-                        let expr = r.expr(tag.match(tags.splice(0, 1)[0]));
-                        return tags.reduce((expr, ctag) => expr.or(tag.match(ctag)), expr);
-                    }
-                )
+                    ))
             ).run(db);
         let result = await query.toArray();
         return result;
